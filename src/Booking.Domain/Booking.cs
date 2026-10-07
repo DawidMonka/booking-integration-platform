@@ -1,3 +1,5 @@
+namespace BookingPlatform.Domain;
+
 public sealed class Booking
 {
     public Guid Id { get; private set; }

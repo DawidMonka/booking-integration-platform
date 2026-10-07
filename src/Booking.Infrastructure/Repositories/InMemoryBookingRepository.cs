@@ -1,8 +1,8 @@
 using System.Collections.Concurrent;
-using Booking.Domain.Repositories;
-using Booking.Domain;
+using BookingPlatform.Domain.Repositories;
+using BookingPlatform.Domain;
 
-namespace Booking.Infrastructure.Repositories;
+namespace BookingPlatform.Infrastructure.Repositories;
 
 public sealed class InMemoryBookingRepository : IBookingRepository
 {

@@ -1,3 +1,5 @@
+namespace BookingPlatform.Domain.Repositories;
+
 public interface IBookingRepository
 {
     Booking? GetById(Guid id);
