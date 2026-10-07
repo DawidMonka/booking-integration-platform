@@ -1,3 +1,7 @@
+using BookingPlatform.Domain;
+using BookingPlatform.Domain.Repositories;
+using BookingPlatform.Infrastructure.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
