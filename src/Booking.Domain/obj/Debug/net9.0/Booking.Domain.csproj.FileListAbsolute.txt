@@ -1,0 +1,11 @@
+C:\Repo\booking-integration-platform\src\Booking.Domain\bin\Debug\net9.0\Booking.Domain.deps.json
+C:\Repo\booking-integration-platform\src\Booking.Domain\bin\Debug\net9.0\Booking.Domain.dll
+C:\Repo\booking-integration-platform\src\Booking.Domain\bin\Debug\net9.0\Booking.Domain.pdb
+C:\Repo\booking-integration-platform\src\Booking.Domain\obj\Debug\net9.0\Booking.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Repo\booking-integration-platform\src\Booking.Domain\obj\Debug\net9.0\Booking.Domain.AssemblyInfoInputs.cache
+C:\Repo\booking-integration-platform\src\Booking.Domain\obj\Debug\net9.0\Booking.Domain.AssemblyInfo.cs
+C:\Repo\booking-integration-platform\src\Booking.Domain\obj\Debug\net9.0\Booking.Domain.csproj.CoreCompileInputs.cache
+C:\Repo\booking-integration-platform\src\Booking.Domain\obj\Debug\net9.0\Booking.Domain.dll
+C:\Repo\booking-integration-platform\src\Booking.Domain\obj\Debug\net9.0\refint\Booking.Domain.dll
+C:\Repo\booking-integration-platform\src\Booking.Domain\obj\Debug\net9.0\Booking.Domain.pdb
+C:\Repo\booking-integration-platform\src\Booking.Domain\obj\Debug\net9.0\ref\Booking.Domain.dll
