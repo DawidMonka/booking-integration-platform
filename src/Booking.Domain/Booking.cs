@@ -10,7 +10,7 @@ public sealed class Booking
 
     public Booking(string customerName, string hotelName, DateOnly checkInDate, DateOnly checkOutDate)
     {
-if (string.IsNullOrWhiteSpace(customerName))
+        if (string.IsNullOrWhiteSpace(customerName))
         {
             throw new ArgumentException("Customer name cannot be null or empty.", nameof(customerName));
         }
@@ -30,7 +30,7 @@ if (string.IsNullOrWhiteSpace(customerName))
         HotelName = hotelName;
         CheckInDate = checkInDate;
         CheckOutDate = checkOutDate;
-        Status = Status.Pending;
-        CreatedAt = DateTime.UtcNow;
+        Status = BookingStatus.Pending;
+        CreatedAt = DateTimeOffset.UtcNow;
     }
 }
