@@ -17,22 +17,22 @@ public sealed class BookingsController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetAllBookings()
+    public async Task<IActionResult> GetAllBookings()
     {
-        var bookings = _bookingRepository.GetAll();
+        var bookings = await _bookingRepository.GetAllAsync();
         return Ok(bookings);
     }
 
     [HttpGet]
     [Route("{id:guid}")]
-    public IActionResult GetBookingById(Guid id)
+    public async Task<IActionResult> GetBookingById(Guid id)
     {
         if (id == Guid.Empty)
         {
             return BadRequest("Invalid booking ID.");
         }
 
-        var booking = _bookingRepository.GetById(id);
+        var booking = await _bookingRepository.GetByIdAsync(id);
         if (booking == null)
         {
             return NotFound();
@@ -41,13 +41,13 @@ public sealed class BookingsController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult CreateBooking([FromBody] CreateBookingRequest request)
+    public async Task<IActionResult> CreateBooking([FromBody] CreateBookingRequest request)
     {
         try
         {
             var booking = new Booking(request.CustomerName, request.HotelName, request.CheckInDate, request.CheckOutDate);
             
-            _bookingRepository.Add(booking);
+            await _bookingRepository.AddAsync(booking);
             return CreatedAtAction(nameof(GetBookingById), new { id = booking.Id }, booking);
         }
         catch (ArgumentException ex)
