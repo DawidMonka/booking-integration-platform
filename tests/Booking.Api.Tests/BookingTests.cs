@@ -1,4 +1,3 @@
-using Xunit;
 using BookingPlatform.Domain;
 
 namespace BookingPlatform.Tests;
