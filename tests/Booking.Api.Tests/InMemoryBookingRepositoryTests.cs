@@ -6,7 +6,7 @@ namespace BookingPlatform.Tests;
 public sealed class InMemoryBookingRepositoryTests
 {
     [Fact]
-    public void Add_ShouldStoreBooking()
+    public async Task Add_ShouldStoreBooking()
     {
         // Arrange
         var repository = new InMemoryBookingRepository();
@@ -18,27 +18,27 @@ public sealed class InMemoryBookingRepositoryTests
             new DateOnly(2026, 11, 15));
 
         // Act
-        repository.Add(booking);
+        await repository.AddAsync(booking);
 
         // Assert
-        var result = repository.GetById(booking.Id);
+        var result = await repository.GetByIdAsync(booking.Id);
 
         Assert.NotNull(result);
         Assert.Equal(booking.Id, result.Id);
     }
 
     [Fact]
-    public void GetById_ShouldReturnNull_WhenBookingDoesNotExist()
+    public async Task GetById_ShouldReturnNull_WhenBookingDoesNotExist()
     {
         var repository = new InMemoryBookingRepository();
 
-        var result = repository.GetById(Guid.NewGuid());
+        var result = await repository.GetByIdAsync(Guid.NewGuid());
 
         Assert.Null(result);
     }
 
     [Fact]
-    public void GetAll_ShouldReturnAddedBookings()
+    public async Task GetAll_ShouldReturnAddedBookings()
     {
         var repository = new InMemoryBookingRepository();
 
@@ -54,10 +54,10 @@ public sealed class InMemoryBookingRepositoryTests
             new DateOnly(2026, 12, 1),
             new DateOnly(2026, 12, 5));
 
-        repository.Add(booking1);
-        repository.Add(booking2);
+        await repository.AddAsync(booking1);
+        await repository.AddAsync(booking2);
 
-        var result = repository.GetAll().ToList();
+        var result = await repository.GetAllAsync();
 
         Assert.Equal(2, result.Count);
         Assert.Contains(result, x => x.Id == booking1.Id);

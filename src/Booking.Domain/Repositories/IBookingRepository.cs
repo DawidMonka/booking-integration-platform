@@ -2,7 +2,7 @@ namespace BookingPlatform.Domain.Repositories;
 
 public interface IBookingRepository
 {
-    Booking? GetById(Guid id);
-    void Add(Booking booking);
-    IEnumerable<Booking> GetAll();
+    Task<Booking?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task AddAsync(Booking booking, CancellationToken cancellationToken = default);
+    Task<IReadOnlyCollection<Booking>> GetAllAsync(CancellationToken cancellationToken = default);
 }

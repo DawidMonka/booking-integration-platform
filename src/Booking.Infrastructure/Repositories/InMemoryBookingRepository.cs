@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using BookingPlatform.Domain.Repositories;
 using BookingPlatform.Domain;
+using System.Collections.Generic;
 
 namespace BookingPlatform.Infrastructure.Repositories;
 
@@ -8,21 +9,33 @@ public sealed class InMemoryBookingRepository : IBookingRepository
 {
     private readonly ConcurrentDictionary<Guid, Booking> _bookings = new();
 
-    public Booking? GetById(Guid id)
+    public Task<Booking?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return _bookings.TryGetValue(id, out var booking) ? booking : null;
+        cancellationToken.ThrowIfCancellationRequested();
+
+        _bookings.TryGetValue(id, out var booking);
+
+        return Task.FromResult(booking);
     }
 
-    public void Add(Booking booking)
+    public Task AddAsync(Booking booking, CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         if (!_bookings.TryAdd(booking.Id, booking))
         {
-            throw new InvalidOperationException($"A booking with ID {booking.Id} already exists.");
+            throw new InvalidOperationException($"Booking with ID {booking.Id} already exists.");
         }
+
+        return Task.CompletedTask;
     }
 
-    public IEnumerable<Booking> GetAll()
+    public Task<IReadOnlyCollection<Booking>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        return _bookings.Values;
+        cancellationToken.ThrowIfCancellationRequested();
+
+        IReadOnlyCollection<Booking> bookings = _bookings.Values.ToArray();
+
+        return Task.FromResult(bookings);
     }
 }
