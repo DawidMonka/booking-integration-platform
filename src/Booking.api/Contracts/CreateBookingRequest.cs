@@ -1,4 +1,4 @@
-namespace Booking.Api.Contracts
+namespace BookingPlatform.Api.Contracts
 {
     public sealed record CreateBookingRequest
     {
