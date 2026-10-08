@@ -1,0 +1,20 @@
+@host = http://localhost:5223
+
+POST {{host}}/api/bookings
+Content-Type: application/json  
+
+{
+  "customerName": "John Smith",
+  "hotelName": "Grand Hotel",
+  "checkInDate": "2026-11-10",
+  "checkOutDate": "2026-11-15"
+}
+
+#### test all
+GET {{host}}/api/bookings
+
+#### test one
+GET {{host}}/api/bookings/478f96d8-77f5-4d5a-8bbf-07fd3ab44a54
+
+#### test none
+GET {{host}}/api/bookings/00000000-0000-0000-0000-000000000001
