@@ -10,6 +10,18 @@ Content-Type: application/json
   "checkOutDate": "2026-11-15"
 }
 
+###
+
+POST {{host}}/api/bookings
+Content-Type: application/json  
+
+{
+  "customerName": "John Boo",
+  "hotelName": "Grand Hotel 2",
+  "checkInDate": "2026-11-10",
+  "checkOutDate": "2026-11-15"
+}
+
 #### test all
 GET {{host}}/api/bookings
 
