@@ -1,3 +1,4 @@
+using BookingPlatform.Api.Messaging;
 using BookingPlatform.Domain;
 using BookingPlatform.Domain.Repositories;
 using BookingPlatform.Infrastructure.Persistence;
@@ -17,6 +18,8 @@ builder.Services.AddDbContext<BookingDbContext>(options =>
     options.UseNpgsql(connectionString);
 });
 builder.Services.AddScoped<IBookingRepository, EfBookingRepository>();
+
+builder.Services.AddSingleton<IEventPublisher, KafkaEventPublisher>();
 
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();

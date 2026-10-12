@@ -2,19 +2,18 @@ using BookingPlatform.Domain;
 using BookingPlatform.Domain.Repositories;
 using BookingPlatform.Api.Contracts;
 using Microsoft.AspNetCore.Mvc;
+using BookingPlatform.Api.Messaging;
+using BookingPlatform.Api.Events;
 
 namespace BookingPlatform.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public sealed class BookingsController : ControllerBase
+public sealed class BookingsController(IBookingRepository bookingRepository,
+IEventPublisher eventPublisher) : ControllerBase
 {
-    private readonly IBookingRepository _bookingRepository;
-
-    public BookingsController(IBookingRepository bookingRepository)
-    {
-        _bookingRepository = bookingRepository;
-    }
+    private readonly IBookingRepository _bookingRepository = bookingRepository;
+    private readonly IEventPublisher _eventPublisher = eventPublisher;
 
     [HttpGet]
     public async Task<IActionResult> GetAllBookings()
@@ -41,13 +40,16 @@ public sealed class BookingsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateBooking([FromBody] CreateBookingRequest request)
+    public async Task<IActionResult> CreateBooking([FromBody] CreateBookingRequest request, CancellationToken cancellationToken)
     {
         try
         {
             var booking = new Booking(request.CustomerName, request.HotelName, request.CheckInDate, request.CheckOutDate);
             
             await _bookingRepository.AddAsync(booking);
+            var bookingCreatedEvent = new BookingCreated(booking.Id, booking.CustomerName, booking.HotelName, booking.CheckInDate, booking.CheckOutDate, booking.CreatedAt);
+            await _eventPublisher.PublishAsync("booking-created-v1", bookingCreatedEvent, cancellationToken);  
+
             return CreatedAtAction(nameof(GetBookingById), new { id = booking.Id }, booking);
         }
         catch (ArgumentException ex)
