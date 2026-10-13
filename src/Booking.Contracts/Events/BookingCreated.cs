@@ -1,5 +1,3 @@
-namespace BookingPlatform.Api.Events;
+namespace BookingPlatform.Contracts.Events;
 
 public sealed record BookingCreated(Guid BookingId, string CustomerName, string HotelName, DateOnly CheckInDate, DateOnly CheckOutDate, DateTimeOffset CreatedAt);
-
-

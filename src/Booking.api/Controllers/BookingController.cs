@@ -3,7 +3,7 @@ using BookingPlatform.Domain.Repositories;
 using BookingPlatform.Api.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using BookingPlatform.Api.Messaging;
-using BookingPlatform.Api.Events;
+using BookingPlatform.Contracts.Events;
 
 namespace BookingPlatform.Api.Controllers;
 

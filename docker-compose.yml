@@ -10,6 +10,11 @@ services:
       - "5432:5432"
     volumes:
       - booking-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bookinguser -d bookingdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   booking-api:
     image: booking-api:local
@@ -24,7 +29,10 @@ services:
       ConnectionStrings__BookingDatabase: "Host=postgres;Port=5432;Database=bookingdb;Username=bookinguser;Password=bookingpassword"
       Kafka__BootstrapServers: "kafka:19092"
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+      kafka-init:
+        condition: service_completed_successfully
 
   kafka:
     image: apache/kafka:4.2.2
@@ -47,6 +55,47 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_SHARE_COORDINATOR_STATE_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_SHARE_COORDINATOR_STATE_TOPIC_MIN_ISR: 1
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "/opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list >/dev/null 2>&1"
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 15s
+
+  kafka-init:
+    image: apache/kafka:4.2.2
+    depends_on:
+      kafka:
+        condition: service_healthy
+    command:
+      - /bin/sh
+      - -c
+      - |
+        /opt/kafka/bin/kafka-topics.sh \
+          --bootstrap-server kafka:19092 \
+          --create \
+          --if-not-exists \
+          --topic booking-created-v1 \
+          --partitions 1 \
+          --replication-factor 1
+
+  supplier-worker:
+    image: supplier-integration-worker:local
+    build:
+      context: .
+      dockerfile: src/SupplierIntegration.Worker/Dockerfile
+    container_name: supplier-integration-worker
+    environment:
+      DOTNET_ENVIRONMENT: Development
+      Kafka__BootstrapServers: "kafka:19092"
+      Kafka__GroupId: "supplier-integration"
+    depends_on:
+      kafka-init:
+        condition: service_completed_successfully
 
 volumes:
   booking-postgres-data:
