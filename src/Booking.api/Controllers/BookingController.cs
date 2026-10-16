@@ -2,18 +2,16 @@ using BookingPlatform.Domain;
 using BookingPlatform.Domain.Repositories;
 using BookingPlatform.Api.Contracts;
 using Microsoft.AspNetCore.Mvc;
-using BookingPlatform.Api.Messaging;
-using BookingPlatform.Contracts.Events;
+using BookingPlatform.Api.Services;
 
 namespace BookingPlatform.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public sealed class BookingsController(IBookingRepository bookingRepository,
-IEventPublisher eventPublisher) : ControllerBase
+public sealed class BookingsController(IBookingRepository bookingRepository, IBookingCreationService bookingCreationService) : ControllerBase
 {
     private readonly IBookingRepository _bookingRepository = bookingRepository;
-    private readonly IEventPublisher _eventPublisher = eventPublisher;
+    private readonly IBookingCreationService _bookingCreationService = bookingCreationService;
 
     [HttpGet]
     public async Task<IActionResult> GetAllBookings()
@@ -46,9 +44,7 @@ IEventPublisher eventPublisher) : ControllerBase
         {
             var booking = new Booking(request.CustomerName, request.HotelName, request.CheckInDate, request.CheckOutDate);
             
-            await _bookingRepository.AddAsync(booking);
-            var bookingCreatedEvent = new BookingCreated(booking.Id, booking.CustomerName, booking.HotelName, booking.CheckInDate, booking.CheckOutDate, booking.CreatedAt);
-            await _eventPublisher.PublishAsync("booking-created-v1", bookingCreatedEvent, cancellationToken);  
+            await _bookingCreationService.CreateAsync(booking, cancellationToken);
 
             return CreatedAtAction(nameof(GetBookingById), new { id = booking.Id }, booking);
         }

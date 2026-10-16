@@ -4,6 +4,7 @@ using BookingPlatform.Domain.Repositories;
 using BookingPlatform.Infrastructure.Persistence;
 using BookingPlatform.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
+using BookingPlatform.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,8 @@ builder.Services.AddDbContext<BookingDbContext>(options =>
 builder.Services.AddScoped<IBookingRepository, EfBookingRepository>();
 
 builder.Services.AddSingleton<IEventPublisher, KafkaEventPublisher>();
+builder.Services.AddScoped<IBookingCreationService, BookingCreationService>();
+builder.Services.AddHostedService<OutboxPublisherService>();
 
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
