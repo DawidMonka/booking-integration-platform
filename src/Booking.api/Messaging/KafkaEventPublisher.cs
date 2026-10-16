@@ -20,19 +20,6 @@ public sealed class KafkaEventPublisher : IEventPublisher, IDisposable
         _producer = new ProducerBuilder<string, string>(config).Build();
     }
 
-   /* public async Task PublishAsync<T>(string topic, T message, CancellationToken cancellationToken = default)
-    {
-        var json = JsonSerializer.Serialize(message);
-
-        var kafkaMessage = new Message<string, string>
-        {
-            Key = Guid.NewGuid().ToString(),
-            Value = json
-        };
-
-        await _producer.ProduceAsync(topic, kafkaMessage, cancellationToken);
-    }*/
-
     public async Task PublishAsync(string topic, string key, string payload, CancellationToken cancellationToken = default)
     {
         var kafkaMessage = new Message<string, string>

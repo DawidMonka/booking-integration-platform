@@ -8,7 +8,6 @@ using BookingPlatform.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//builder.Services.AddSingleton<IBookingRepository, InMemoryBookingRepository>();
 var connectionString = builder.Configuration
     .GetConnectionString("BookingDatabase")
     ?? throw new InvalidOperationException(
