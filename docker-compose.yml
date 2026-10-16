@@ -101,9 +101,23 @@ services:
       Kafka__BootstrapServers: "kafka:19092"
       Kafka__GroupId: "supplier-integration"
       Kafka__DeadLetterTopic: "booking-created-v1.dlq"
+      SupplierApi__BaseUrl: "http://mock-supplier:8080"
     depends_on:
       kafka-init:
         condition: service_completed_successfully
+      mock-supplier:
+        condition: service_started
+  
+  mock-supplier:
+    image: mock-supplier-api:local
+    build:
+      context: .
+      dockerfile: src/MockSupplier.Api/Dockerfile
+    ports:
+      - "5196:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: "8080"
 
 volumes:
   booking-postgres-data:
